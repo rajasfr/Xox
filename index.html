@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - A Pen by Rajas Naik</title>
+  
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tic-Tac-Toe</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    .game-board {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      grid-template-rows: repeat(3, 100px);
+      gap: 5px;
+      margin-bottom: 10px;
+    }
+
+    .cell {
+      width: 100px;
+      height: 100px;
+      background-color: #fff;
+      border: 2px solid #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2em;
+      cursor: pointer;
+    }
+
+    .cell:hover {
+      background-color: #ddd;
+    }
+
+    .status {
+      margin-bottom: 10px;
+    }
+
+    button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+
+    .developer {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="developer">
+    Developer: Rajas<br>
+    <a href="https://twitter.com/Rajasf2r" target="_blank">Twitter: @Rajasf2r</a><br>
+    <a href="https://buymeacoffee.com/realrajas" target="_blank">BuyMeACoffee: realrajas</a>
+  </div>
+  <div class="container">
+    <div class="status" id="status">Click "Start" to begin!</div>
+    <div class="game-board" id="gameBoard">
+      <div class="cell" data-index="0"></div>
+      <div class="cell" data-index="1"></div>
+      <div class="cell" data-index="2"></div>
+      <div class="cell" data-index="3"></div>
+      <div class="cell" data-index="4"></div>
+      <div class="cell" data-index="5"></div>
+      <div class="cell" data-index="6"></div>
+      <div class="cell" data-index="7"></div>
+      <div class="cell" data-index="8"></div>
+    </div>
+    <button id="startButton">Start</button>
+    <button id="restartButton">Restart</button>
+  </div>
+
+  <script>
+    let isPlayerTurn = false;
+    let board = ['', '', '', '', '', '', '', '', ''];
+    const winPatterns = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8], // Rows
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8], // Columns
+      [0, 4, 8],
+      [2, 4, 6] // Diagonals
+    ];
+    const startButton = document.getElementById('startButton');
+    const restartButton = document.getElementById('restartButton');
+    const statusElement = document.getElementById('status');
+    const cells = document.querySelectorAll('.cell');
+
+    function initializeGame() {
+      board = ['', '', '', '', '', '', '', '', ''];
+      cells.forEach(cell => cell.textContent = '');
+      statusElement.textContent = 'Player\'s turn';
+      isPlayerTurn = true;
+    }
+
+    function checkWin(player) {
+      return winPatterns.some(pattern =>
+        pattern.every(index => board[index] === player)
+      );
+    }
+
+    function makeComputerMove() {
+      let emptyIndices = board.map((val, index) => val === '' ? index : null).filter(val => val !== null);
+      if (emptyIndices.length === 0) return;
+      let move = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
+      board[move] = 'O';
+      document.querySelector(`.cell[data-index="${move}"]`).textContent = 'O';
+      if (checkWin('O')) {
+        statusElement.textContent = 'Computer wins!';
+        isPlayerTurn = false;
+        return;
+      }
+      isPlayerTurn = true;
+      statusElement.textContent = 'Player\'s turn';
+    }
+
+    function handleCellClick(event) {
+      if (!isPlayerTurn) return;
+      const cell = event.target;
+      const index = cell.getAttribute('data-index');
+      if (board[index] !== '') return;
+      board[index] = 'X';
+      cell.textContent = 'X';
+      if (checkWin('X')) {
+        statusElement.textContent = 'Player wins!';
+        isPlayerTurn = false;
+        return;
+      }
+      makeComputerMove();
+    }
+
+    function handleStartButton() {
+      initializeGame();
+    }
+
+    function handleRestartButton() {
+      initializeGame();
+    }
+    cells.forEach(cell => cell.addEventListener('click', handleCellClick));
+    startButton.addEventListener('click', handleStartButton);
+    restartButton.addEventListener('click', handleRestartButton);
+  </script>
+</body>
+
+</html>
+<!-- partial -->
+  
+</body>
+</html>
